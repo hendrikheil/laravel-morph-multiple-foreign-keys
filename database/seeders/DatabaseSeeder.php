@@ -28,25 +28,5 @@ class DatabaseSeeder extends Seeder
         ]);
         $a->account()->associate($applicant);
         $a->save();
-
-        \Log::info('account', [$a->account]);
-
-        \DB::enableQueryLog();
-        User::with('account')->first()->toArray();
-        \Log::info(\DB::getQueryLog());
-
-        /*$b = new User([
-            'name' => 'John Doe',
-            'type' => 'employee',
-            'email' => 'test123@stafftastic.com',
-            'password' => 'test',
-        ]);
-        $b->save();
-
-        $applicant = new Applicant();
-        $applicant->user()->associate($b);
-        $applicant->save();
-
-        \Log::info($b->account()->getChild());*/
     }
 }

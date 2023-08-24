@@ -11,33 +11,20 @@ return new class extends Migration
 
     public function up(): void
     {
-        Schema::createFunction(
-            name: 'check_account_exists',
-            parameters: ['_type' => 'varchar', '_id' => 'uuid'],
-            return: 'boolean',
-            language: 'sql',
-            body: "
-            select (CASE
-                WHEN _type = 'applicant' THEN (SELECT EXISTS(SELECT * FROM applicants WHERE id = _id))
-                ELSE false
-            END)
-            ",
-            options: ['volatility' => 'stable']
-        );
-
         Schema::create('users', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('name');
-            $table->string('account_type');
-            $table->uuid('account_id');
+            $table->string('type');
+            $table->foreignUuid('applicant_id')->nullable()->constrained('applicants');
+            $table->foreignUuid('employee_id')->nullable()->constrained('employees');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->timestamps();
 
-            $table->unique(['account_type', 'account_id']);
+            $table->unique(['type', 'applicant_id', 'employee_id']);
         });
 
-        DB::statement('ALTER TABLE users ADD CONSTRAINT check_account_exists CHECK (check_account_exists(account_type, account_id))');
+        DB::statement('ALTER TABLE users ADD CONSTRAINT only_one_account_relation CHECK (num_nonnulls(applicant_id, employee_id) = 1)');
     }
 };

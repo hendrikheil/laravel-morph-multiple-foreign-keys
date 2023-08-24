@@ -7,19 +7,15 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 
-class Applicant extends Model
+class Employee extends Model
 {
     use HasFactory;
     use HasUuids;
 
     protected $guarded = [];
 
-    protected $with = [
-        'user',
-    ];
-
     public function user(): MorphOne
     {
-        return $this->morphOne(User::class, __FUNCTION__, 'type', 'applicant_id');
+        return $this->morphOne(User::class, __FUNCTION__, 'type', 'employee_id');
     }
 }
