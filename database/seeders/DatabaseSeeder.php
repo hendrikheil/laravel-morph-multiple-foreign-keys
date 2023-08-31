@@ -7,7 +7,6 @@ namespace Database\Seeders;
 use App\Models\Applicant;
 use App\Models\User;
 use Illuminate\Database\Seeder;
-use Str;
 
 class DatabaseSeeder extends Seeder
 {
@@ -16,16 +15,19 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $applicant = new Applicant([
-            'id' => Str::uuid(),
-        ]);
-        $applicant->save();
-
         $a = new User([
             'name' => 'John Doe',
             'email' => 'test@stafftastic.com',
             'password' => 'test',
+            'type' => 'applicant',
         ]);
+        $a->save();
+
+        $applicant = new Applicant([
+            'user_id' => $a->id,
+        ]);
+        $applicant->save();
+
         $a->account()->associate($applicant);
         $a->save();
     }

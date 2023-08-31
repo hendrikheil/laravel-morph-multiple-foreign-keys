@@ -28,7 +28,9 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    protected $with = [];
+    protected $with = [
+        'account',
+    ];
 
     public function account(): MorphTo
     {

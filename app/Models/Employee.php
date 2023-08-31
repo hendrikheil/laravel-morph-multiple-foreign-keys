@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
@@ -10,7 +9,16 @@ use Illuminate\Database\Eloquent\Relations\MorphOne;
 class Employee extends Model
 {
     use HasFactory;
-    use HasUuids;
+
+    protected $primaryKey = 'user_id';
+
+    protected $keyType = 'string';
+
+    public $incrementing = false;
+
+    protected $hidden = [
+        'user_id',
+    ];
 
     protected $guarded = [];
 
